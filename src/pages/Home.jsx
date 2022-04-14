@@ -1,8 +1,21 @@
+import React from "react"
 import Card from "../components/Card/Card"
 
-
-function Home ({items, searchValue, setSearchValue, onChangeSearchInput, onAddToFavorite, onAddToCart}) {
-    return(
+function Home ({isLoading, items, searchValue, setSearchValue, onChangeSearchInput, onAddToFavorite, onAddToCart}) { 
+  const renderItems = () => {
+      return( isLoading
+        ? [...Array(4)]
+        : items.filter(item =>item.title.toLowerCase().includes(searchValue.toLowerCase())))
+        .map((item, index) =>
+          (<Card 
+          key={index}
+          onFavorite={(obj)=>onAddToFavorite(obj)} 
+          onPlus={(obj) => onAddToCart(obj)} 
+          loading={isLoading}
+          {...item}></Card>))
+    }
+  
+  return(
         <div className="content p-40">
         <div className="d-flex align-center mb-40 justify-between ">
           <h1>{searchValue? `Поиск по запросу: "${searchValue}"`: 'Предложение недели'}</h1>
@@ -12,12 +25,7 @@ function Home ({items, searchValue, setSearchValue, onChangeSearchInput, onAddTo
           </div>
         </div>
         <div className="d-flex flex-wrap">
-             {items.filter(item =>item.name.toLowerCase().includes(searchValue.toLowerCase())).map((item, index) =>
-             (<Card 
-             key={index}
-             onFavorite={(obj)=>onAddToFavorite(obj)} 
-             onPlus={(obj) => onAddToCart(obj)} 
-             {...item}></Card>))}
+            {renderItems()}
         </div>
       </div>
     )

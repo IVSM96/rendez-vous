@@ -66,8 +66,7 @@ function Drawer({onCloseCart, onRemove, opened}) {
           <Info
            title={isOrderComplete? "Заказ оформлен" :"Корзина пустая" } 
            description={isOrderComplete? `Ваш заказ №${orderId} скоро будет передан курьерской доставке` : "Добавьте любой товар в вашу корзину, чтобы сделать заказ."} 
-           image="box.png">
-          </Info>
+           image="box.png"/>
             )}
     </div>
     </div>

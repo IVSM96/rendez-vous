@@ -12,7 +12,7 @@ function Home ({isLoading, items, searchValue, setSearchValue, onChangeSearchInp
           onFavorite={(obj)=>onAddToFavorite(obj)} 
           onPlus={(obj) => onAddToCart(obj)} 
           loading={isLoading}
-          {...item}></Card>))
+          {...item}/>))
     }
   
   return(

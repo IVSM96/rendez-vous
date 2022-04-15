@@ -44,14 +44,8 @@ const onAddToCart = async (obj) => {
         setCartItems((prev) =>prev.filter(item => Number(item.parentId) !== Number(obj.id)))
         axios.delete(`https://62567d3252d8738c692f86e0.mockapi.io/cart/${findItem.id}`) 
       }else {
-        setCartItems((prev)=>[...prev,obj])
-       const {data} = await axios.post('https://62567d3252d8738c692f86e0.mockapi.io/cart', obj)
-        setCartItems((prev)=> prev.map(item => {
-          if(item.parentId === data.parentId) {
-            return  {...item, id: data.id }
-          }
-          return item
-        }))
+       setCartItems((prev)=>[...prev,obj])
+       axios.post('https://62567d3252d8738c692f86e0.mockapi.io/cart', obj)
       }
     }catch(error) {
       alert('Не удалось добавить в корзину!')
@@ -80,8 +74,8 @@ const isItemAdded = (id) => {
 return (
     <AppContext.Provider value={{cartItems, favorites, items, isItemAdded, onAddToCart, onAddToFavorite, setCartOpened, setCartItems}}>
       <div className="wrapper clear">
-      <Drawer opened={cartOpened} onRemove={onRemoveItem} onCloseCart={()=>setCartOpened(false)}></Drawer>
-        <Header onClickCart={()=>setCartOpened(true)}></Header>
+      <Drawer opened={cartOpened} onRemove={onRemoveItem} onCloseCart={()=>setCartOpened(false)}/>
+        <Header onClickCart={()=>setCartOpened(true)}/>
         <Routes>
           <Route path='/' element={
             <Home 
@@ -93,10 +87,10 @@ return (
               onAddToFavorite={onAddToFavorite}
               onAddToCart={onAddToCart}
               isLoading={isLoading}
-            ></Home>}>
+            />}>
           </Route>
-          <Route path='/favorites' element={<Favorites></Favorites>}></Route>
-          <Route path='/orders' element={<Orders></Orders>}></Route>
+          <Route path='/favorites' element={<Favorites/>}></Route>
+          <Route path='/orders' element={<Orders/>}></Route>
         </Routes>
       </div> 
     </AppContext.Provider>

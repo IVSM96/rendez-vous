@@ -6,17 +6,19 @@ import AppContext from "../../context";
 
 
 function Card({loading=false, id, imageUrl, title, price, onPlus, onFavorite, favorited=false, added=false}) {
-    const {isItemAdded} = useContext(AppContext)
-    const [isFavorite, setIsFavorite] = useState(favorited);
+  const {isItemAdded} = useContext(AppContext)
+  const [isFavorite, setIsFavorite] = useState(favorited);
+  const obj = {id, parentId: id, imageUrl, title, price}
     
-    const onClickPlus = () => {
-        onPlus({id, imageUrl, title, price})
-    };
-    const onClickFavorite = () => {
-        onFavorite({ id, imageUrl, title, price})
-        setIsFavorite(!isFavorite)
-    }
-    return(
+const onClickPlus = () => {
+  onPlus(obj)
+}
+const onClickFavorite = () => {
+  onFavorite(obj)
+  setIsFavorite(!isFavorite)
+}
+
+return(
     <div className={styles.card}>
         {
         loading ? 
@@ -35,9 +37,11 @@ function Card({loading=false, id, imageUrl, title, price, onPlus, onFavorite, fa
             <rect x="134" y="137" rx="0" ry="0" width="1" height="6" />
           </ContentLoader> : 
           <>
+          {onFavorite && (
           <div  onClick={onClickFavorite} className={styles.favorite}>
           <img src={isFavorite?"favorite_active.svg" :"favorite.svg"} alt=""></img>
           </div>
+          )}
           <img width={133} height={112} src={imageUrl} alt=""></img>
           <h5>{title}</h5>
           <div className="d-flex justify-between align-center">
@@ -45,7 +49,9 @@ function Card({loading=false, id, imageUrl, title, price, onPlus, onFavorite, fa
           <span>Цена:</span>
           <b>{price} руб.</b>
           </div>
-          <button onClick={onClickPlus} className={isItemAdded(id) ? styles.buttonActive : styles.button}><img width={11} height={11} src={isItemAdded(id) ? 'done.svg' : 'add.svg'} alt=""></img></button>
+          {onPlus && (
+              <button onClick={onClickPlus} className={isItemAdded(id) ? styles.buttonActive : styles.button}><img width={11} height={11} src={isItemAdded(id) ? 'done.svg' : 'add.svg'} alt=""></img></button>
+          )}
           </div>
           </>
         }

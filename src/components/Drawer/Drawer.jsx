@@ -1,10 +1,13 @@
-import React, {useState, useContext} from "react";
-import Info from "./Info/Info";
-import AppContext from "../context";
+import React, {useState} from "react";
 import axios from "axios";
+import Info from "../Info/Info";
+import {useCart} from '../hooks/useCart';
+import styles from './Drawer.module.scss';
 
-function Draver({onCloseCart, onRemove}) {
-  const {setCartItems, cartItems} = useContext(AppContext);
+
+
+function Drawer({onCloseCart, onRemove, opened}) {
+  const {totalPrice, cartItems, setCartItems} = useCart()
   const [isOrderComplete, setIsOrderComplete] = useState(false);
   const [orderId, setOrderId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,8 +29,8 @@ function Draver({onCloseCart, onRemove}) {
     setIsLoading(false)
  }  
   return(
-    <div className="overlay">
-    <div className="drawer">
+    <div className={`${styles.overlay} ${opened? styles.overlayVisible : '' }`}>
+    <div className={styles.drawer}>
           <h2 className="mb-30 d-flex justify-between">Корзина<button onClick={onCloseCart} className="button cu-p"><img width={11} height={11} src="close.svg" alt=""></img></button></h2>
           {cartItems.length > 0 ? (
           <div className=""> 
@@ -48,12 +51,12 @@ function Draver({onCloseCart, onRemove}) {
             <li>
               <span>Итого:</span>
               <div></div>
-              <b>21 498 руб.</b>
+              <b>{totalPrice} руб.</b>
             </li>
             <li>
-            <span>Налог 5%:</span>
+            <span>Скидка:</span>
               <div></div>
-              <b>1074 руб.</b>
+              <b>0 руб.</b>
             </li>
           </ul>
           <button disabled={isLoading} onClick={onClickOrder} className="greenButton">Оформить заказ<img src="arrow.svg" alt=""></img></button>
@@ -71,4 +74,4 @@ function Draver({onCloseCart, onRemove}) {
     )
 }
 
-export default Draver;
+export default Drawer;

@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
 import Info from "../Info/Info";
 import styles from './Drawer.module.scss';
 import {useSelector} from 'react-redux'
-import {addCartFetchAction} from '../../redux/actions'
+import {fetchCartItem} from '../../redux/asyncActions'
 import {store} from '../../redux/store'
 
 
@@ -15,13 +15,9 @@ function Drawer({onCloseCart, onRemove, opened}) {
   const [isLoading, setIsLoading] = useState(false);
 
 
-
-const fetchCartItem  = () => {
-    return dispatch => {
-     axios.get('https://62567d3252d8738c692f86e0.mockapi.io/cart').then(res => dispatch(addCartFetchAction(res.data)))
-    }
-}
+useEffect(()=> {
 store.dispatch(fetchCartItem())
+},[])
 
 
 const totalPrice = cartItems.reduce((sum, obj)=> obj.price + sum,0)

@@ -30,11 +30,12 @@ const onAddToCart = async (obj) => {
     try{
       const findItem = cartItems.find((item) =>Number(item.parentId) === Number(obj.id) )
       if(findItem) {
+       await axios.delete(`https://62567d3252d8738c692f86e0.mockapi.io/cart/${findItem.id}`) 
         dispatch(addCartDeleteAction(obj))
-        axios.delete(`https://62567d3252d8738c692f86e0.mockapi.io/cart/${findItem.id}`) 
+         
       }else {
+       await axios.post('https://62567d3252d8738c692f86e0.mockapi.io/cart', obj)
         dispatch(addCartPostAction(obj))
-        axios.post('https://62567d3252d8738c692f86e0.mockapi.io/cart', obj)
       }
     }catch(error) {
       alert('Не удалось добавить в корзину!')

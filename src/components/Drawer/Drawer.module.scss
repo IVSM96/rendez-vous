@@ -8,8 +8,7 @@
   z-index: 1;
   visibility: hidden;
   opacity: 0;
-  transform: opacity 0.1s ease-in-out;
-  transform: visibility 0.1s ease-in-out;
+  transition: opacity visibility 0.1s ease-in-out;
   overflow: hidden;
  
 }

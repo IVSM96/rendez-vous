@@ -1,24 +1,38 @@
 import React, {useState} from "react";
 import axios from "axios";
 import Info from "../Info/Info";
-import {useCart} from '../hooks/useCart';
 import styles from './Drawer.module.scss';
+import {useSelector} from 'react-redux'
+import {addCartFetchAction} from '../../redux/actions'
+import {store} from '../../redux/store'
 
 
 
 function Drawer({onCloseCart, onRemove, opened}) {
-  const {totalPrice, cartItems, setCartItems} = useCart()
+  const cartItems = useSelector(state=>state.cartItems)
   const [isOrderComplete, setIsOrderComplete] = useState(false);
   const [orderId, setOrderId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const onClickOrder = async () => {
+
+
+const fetchCartItem  = () => {
+    return dispatch => {
+     axios.get('https://62567d3252d8738c692f86e0.mockapi.io/cart').then(res => dispatch(addCartFetchAction(res.data)))
+    }
+}
+store.dispatch(fetchCartItem())
+
+
+const totalPrice = cartItems.reduce((sum, obj)=> obj.price + sum,0)
+
+const onClickOrder = async () => {
     try {
       setIsLoading(true)
       const {data} = await axios.post('https://62567d3252d8738c692f86e0.mockapi.io/orders', {items: cartItems})
       setOrderId(data.id)
       setIsOrderComplete(true)
-      setCartItems([])
+      // setCartItems([])
       for(let i = 0; i < Array.lenth; i++) {
         const item = cartItems[i];
         await axios.delete('https://62567d3252d8738c692f86e0.mockapi.io/cart' + item.id)

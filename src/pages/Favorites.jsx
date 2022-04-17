@@ -1,8 +1,19 @@
 import { useContext } from "react";
 import Card from "../components/Card/Card";
 import AppContext from "../context";
+import axios from "axios";
+import { store } from "../redux/store";
+import {addFavoritesFetchAction} from '../redux/actions'
 
 function Favorites () {
+
+const fetchFavorites  = () => {
+    return dispatch => {
+     axios.get('https://62567d3252d8738c692f86e0.mockapi.io/favorites').then(res=>dispatch(addFavoritesFetchAction(res.data)))
+    }
+}
+store.dispatch(fetchFavorites())
+
   const {favorites, onAddToFavorite} = useContext(AppContext)
     return(
         <div className="content p-40">

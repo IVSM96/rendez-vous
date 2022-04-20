@@ -6,7 +6,6 @@ import {useSelector} from 'react-redux'
 import {fetchItem} from '../redux/asyncActions';
 
 
-
 function Home ({isLoading, searchValue, onChangeSearchInput, onAddToFavorite, onAddToCart}) { 
   const {setIsLoading} = useContext(AppContext)
   const items = useSelector(state=>state.items)
@@ -42,6 +41,7 @@ const renderItems = () => {
             {renderItems()}
         </div>
       </div>
+    
     )
 }
 

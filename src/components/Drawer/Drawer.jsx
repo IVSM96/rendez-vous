@@ -5,7 +5,7 @@ import styles from './Drawer.module.scss';
 import {useSelector} from 'react-redux'
 import {fetchCartItem} from '../../redux/asyncActions'
 import {store} from '../../redux/store'
-
+import MuiDrawer from '@mui/material/Drawer'
 
 
 function Drawer({onCloseCart, onRemove, opened}) {
@@ -34,14 +34,14 @@ const onClickOrder = async () => {
         await axios.delete('https://62567d3252d8738c692f86e0.mockapi.io/cart' + item.id)
       }
     }catch(error){
-       alert('шибка при создании заказа')
+       alert('шибка при создании заказа!')
     }
     setIsLoading(false)
  }  
   return(
-    <div className={`${styles.overlay} ${opened? styles.overlayVisible : '' }`}>
-    <div className={styles.drawer}>
-          <h2 className="mb-30 d-flex justify-between">Корзина<button onClick={onCloseCart} className="button cu-p"><img width={11} height={11} src="close.svg" alt=""></img></button></h2>
+    <MuiDrawer anchor='right' open={opened === true} onClose={onCloseCart}>
+      <div className={styles.drawer}>
+       <h2 className="mb-30 d-flex justify-between">Корзина<button onClick={onCloseCart} className="button cu-p"><img width={11} height={11} src="close.svg" alt=""></img></button></h2>
           {cartItems.length > 0 ? (
           <div className=""> 
               <div className="items">
@@ -78,9 +78,12 @@ const onClickOrder = async () => {
            description={isOrderComplete? `Ваш заказ №${orderId} скоро будет передан курьерской доставке` : "Добавьте любой товар в вашу корзину, чтобы сделать заказ."} 
            image="box.png"/>
             )}
-    </div>
-    </div>
+        </div>
+    </MuiDrawer>
     )
 }
 
 export default Drawer;
+
+
+

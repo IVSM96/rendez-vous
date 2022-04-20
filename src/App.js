@@ -20,22 +20,21 @@ function App() {
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
-const onRemoveItem = (id) => {
+const onRemoveItem = async (id) => {
     try{
-    dispatch(addItemRemoveAction(id))
-    axios.delete(`https://62567d3252d8738c692f86e0.mockapi.io/cart/${id}`)
+      await axios.delete(`https://62567d3252d8738c692f86e0.mockapi.io/cart/${id}`)
+      .then(dispatch(addItemRemoveAction(id)))
     }catch(error) {alert('Ошибка при удалении из корзины!')}
   }
 const onAddToCart = async (obj) => {
     try{
       const findItem = cartItems.find((item) =>Number(item.parentId) === Number(obj.id) )
       if(findItem) {
-       await axios.delete(`https://62567d3252d8738c692f86e0.mockapi.io/cart/${findItem.id}`) 
-        dispatch(addCartDeleteAction(obj))
-         
+       await axios.delete(`https://62567d3252d8738c692f86e0.mockapi.io/cart/${findItem.id}`)
+       .then(dispatch(addCartDeleteAction(obj))) 
       }else {
        await axios.post('https://62567d3252d8738c692f86e0.mockapi.io/cart', obj)
-        dispatch(addCartPostAction(obj))
+       .then(dispatch(addCartPostAction(obj)))
       }
     }catch(error) {
       alert('Не удалось добавить в корзину!')
@@ -43,17 +42,18 @@ const onAddToCart = async (obj) => {
   }
 const onAddToFavorite = async (obj) => {
     try{
-    if(favorites.find((favObj) => Number(favObj.id) === Number(obj.id))){
-    dispatch(addFavoritesDeleteAction(obj))
-    axios.delete(`https://62567d3252d8738c692f86e0.mockapi.io/favorites/${obj.id}`)
+    const findFavorites = favorites.find((item) =>Number(item.parentId) === Number(obj.id) )
+    if(findFavorites){
+      await axios.delete(`https://62567d3252d8738c692f86e0.mockapi.io/favorites/${obj.id}`)
+      .then(dispatch(addFavoritesDeleteAction(obj)))
     }else{
-      const {data} = await axios.post('https://62567d3252d8738c692f86e0.mockapi.io/favorites', obj)
-      dispatch(addFavoritesAction(data))
+      await axios.post('https://62567d3252d8738c692f86e0.mockapi.io/favorites', obj)
+      .then(res => dispatch(addFavoritesAction(res.data)))
     }
    }catch (error) {
     alert('Не удалось добавить в фавориты!')
    }
-  }
+}
 const onChangeSearchInput = (event) => {
     setSearchValue(event.target.value)
   }

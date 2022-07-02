@@ -1,8 +1,21 @@
-import React from "react"
+import React, { useContext, useEffect } from "react"
 import Card from "../components/Card/Card"
+import {store} from '../redux/store'
+import AppContext from "../context";
+import {useSelector} from 'react-redux'
+import {fetchItem} from '../redux/asyncActions';
 
-function Home ({isLoading, items, searchValue, setSearchValue, onChangeSearchInput, onAddToFavorite, onAddToCart}) { 
-  const renderItems = () => {
+
+function Home ({isLoading, searchValue, onChangeSearchInput, onAddToFavorite, onAddToCart}) { 
+  const {setIsLoading} = useContext(AppContext)
+  const items = useSelector(state=>state.items)
+
+useEffect(() => {
+    store.dispatch(fetchItem())
+    setIsLoading(false)
+},[])
+
+const renderItems = () => {
       return( isLoading
         ? [...Array(4)]
         : items.filter(item =>item.title.toLowerCase().includes(searchValue.toLowerCase())))
@@ -28,6 +41,7 @@ function Home ({isLoading, items, searchValue, setSearchValue, onChangeSearchInp
             {renderItems()}
         </div>
       </div>
+    
     )
 }
 

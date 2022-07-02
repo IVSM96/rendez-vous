@@ -1,37 +1,47 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
 import Info from "../Info/Info";
-import {useCart} from '../hooks/useCart';
 import styles from './Drawer.module.scss';
-
+import {useSelector} from 'react-redux'
+import {fetchCartItem} from '../../redux/asyncActions'
+import {store} from '../../redux/store'
+import MuiDrawer from '@mui/material/Drawer'
 
 
 function Drawer({onCloseCart, onRemove, opened}) {
-  const {totalPrice, cartItems, setCartItems} = useCart()
+  const cartItems = useSelector(state=>state.cartItems)
   const [isOrderComplete, setIsOrderComplete] = useState(false);
   const [orderId, setOrderId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const onClickOrder = async () => {
+
+useEffect(()=> {
+store.dispatch(fetchCartItem())
+},[])
+
+
+const totalPrice = cartItems.reduce((sum, obj)=> obj.price + sum,0)
+
+const onClickOrder = async () => {
     try {
       setIsLoading(true)
       const {data} = await axios.post('https://62567d3252d8738c692f86e0.mockapi.io/orders', {items: cartItems})
       setOrderId(data.id)
       setIsOrderComplete(true)
-      setCartItems([])
+      // setCartItems([])
       for(let i = 0; i < Array.lenth; i++) {
         const item = cartItems[i];
         await axios.delete('https://62567d3252d8738c692f86e0.mockapi.io/cart' + item.id)
       }
     }catch(error){
-       alert('шибка при создании заказа')
+       alert('шибка при создании заказа!')
     }
     setIsLoading(false)
  }  
   return(
-    <div className={`${styles.overlay} ${opened? styles.overlayVisible : '' }`}>
-    <div className={styles.drawer}>
-          <h2 className="mb-30 d-flex justify-between">Корзина<button onClick={onCloseCart} className="button cu-p"><img width={11} height={11} src="close.svg" alt=""></img></button></h2>
+    <MuiDrawer anchor='right' open={opened === true} onClose={onCloseCart}>
+      <div className={styles.drawer}>
+       <h2 className="mb-30 d-flex justify-between">Корзина<button onClick={onCloseCart} className="button cu-p"><img width={11} height={11} src="close.svg" alt=""></img></button></h2>
           {cartItems.length > 0 ? (
           <div className=""> 
               <div className="items">
@@ -68,9 +78,12 @@ function Drawer({onCloseCart, onRemove, opened}) {
            description={isOrderComplete? `Ваш заказ №${orderId} скоро будет передан курьерской доставке` : "Добавьте любой товар в вашу корзину, чтобы сделать заказ."} 
            image="box.png"/>
             )}
-    </div>
-    </div>
+        </div>
+    </MuiDrawer>
     )
 }
 
 export default Drawer;
+
+
+

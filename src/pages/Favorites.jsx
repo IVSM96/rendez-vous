@@ -1,9 +1,17 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import Card from "../components/Card/Card";
+import {useSelector} from 'react-redux'
 import AppContext from "../context";
+import { store } from "../redux/store";
+import {fetchFavorites} from '../redux/asyncActions'
 
 function Favorites () {
-  const {favorites, onAddToFavorite} = useContext(AppContext)
+
+useEffect(() => {
+  store.dispatch(fetchFavorites())
+},[])
+const favorites = useSelector(state=>state.favorites)
+  const {onAddToFavorite} = useContext(AppContext)
     return(
         <div className="content p-40">
         <div className="d-flex align-center mb-40 justify-between ">

@@ -1,0 +1,8 @@
+export const addCartPostAction = (payload) => ({type:"ADD_CART_POST", payload})
+export const addCartDeleteAction = (payload) => ({type:"ADD_CART_DELETE", payload})
+export const addCartFetchAction = (payload) => ({type:"ADD_CART_FETCH", payload})
+export const addItemsFetchAction = (payload) => ({type:"ADD_ITEMS_FETCH", payload})
+export const addItemRemoveAction = (payload) => ({type:"REMOVE_ITEM", payload})
+export const addFavoritesFetchAction = (payload) => ({type:"ADD_FAVORITE_FETCH", payload})
+export const addFavoritesAction = (payload) => ({type:"ADD_FAVORITE", payload})
+export const addFavoritesDeleteAction = (payload) => ({type:"ADD_FAVORITE_DELETE", payload})
